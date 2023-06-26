@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Threat Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .refresh-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            transition: transform 0.5s;
+        }
+
+        .refresh-icon:hover {
+            transform: rotate(360deg);
+        }
+
+        .filter-form {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .filter-form label {
+            margin-right: 10px;
+        }
+
+        .filter-form input[type="date"],
+        .filter-form input[type="submit"] {
+            padding: 6px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        .filter-form input[type="submit"] {
+            padding: 6px 10px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        table.data {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .checkboxes-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .checkboxes-container label {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .checkboxes-container input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .search-area {
+            position: absolute;
+            top: 20px;
+            right: 70px;
+        }
+
+        .search-input {
+            padding: 6px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: yellow;
+            box-shadow: 0 0 5px yellow;
+        }
+    </style>
+  <!DOCTYPE html>
+  <html>
+  <head>
+      <title>Threat Table</title>
+      <style>
+          /* ... CSS styles ... */
+      </style>
+      <script>
+          document.addEventListener('DOMContentLoaded', function() {
+              var checkboxes = document.querySelectorAll('.response-checkbox');
+              var from_date_input = document.getElementById('from_date');
+              var to_date_input = document.getElementById('to_date');
+  
+              var savedCheckboxes = JSON.parse(localStorage.getItem('selected_checkboxes')) || [];
+  
+              // Restore checkbox state
+              checkboxes.forEach(function(checkbox) {
+                  if (savedCheckboxes.includes(checkbox.value)) {
+                      checkbox.checked = true;
+                  }
+              });
+  
+              // Restore date values
+              from_date_input.value = localStorage.getItem('from_date') || '';
+              to_date_input.value = localStorage.getItem('to_date') || '';
+  
+              // Save checkbox state and date values to localStorage on change
+              checkboxes.forEach(function(checkbox) {
+                  checkbox.addEventListener('change', function() {
+                      var selectedCheckboxes = Array.from(checkboxes)
+                          .filter(function(checkbox) {
+                              return checkbox.checked;
+                          })
+                          .map(function(checkbox) {
+                              return checkbox.value;
+                          });
+  
+                      localStorage.setItem('selected_checkboxes', JSON.stringify(selectedCheckboxes));
+                  });
+              });
+  
+              from_date_input.addEventListener('input', function() {
+                  localStorage.setItem('from_date', this.value);
+              });
+  
+              to_date_input.addEventListener('input', function() {
+                  localStorage.setItem('to_date', this.value);
+              });
+  
+              var clearButton = document.getElementById('clear-button');
+              clearButton.addEventListener('click', function() {
+                  checkboxes.forEach(function(checkbox) {
+                      checkbox.checked = false;
+                  });
+                  from_date_input.value = '';
+                  to_date_input.value = '';
+                  localStorage.removeItem('selected_checkboxes');
+                  localStorage.removeItem('from_date');
+                  localStorage.removeItem('to_date');
+              });
+          });
+      </script>
+  </head>
+  <body>
+      <!-- ... existing code ... -->
+  
+   
+  
+  </body>
+  </html>
+  
+</head>
+<body>
+    <form method="post" id="filter-form">
+        <label><input type="checkbox" name="response" value="20x" class="response-checkbox"> 20x</label>
+        <label><input type="checkbox" name="response" value="40x" class="response-checkbox"> 40x</label>
+        <!-- Add more checkboxes as needed -->
+        <label for="from_date">From:</label>
+        <input type="date" name="from_date" id="from_date">
+        <label for="to_date">To:</label>
+        <input type="date" name="to_date" id="to_date">
+
+        <button type="submit">Filter</button>
+        <button id="clear-button">Clear</button>
+    </form>
+    
+    <table class="data">  
+        <thead>
+            <tr>
+                <th>TIMESTAMP</th>
+                <th>IP</th>
+                <th>MESSAGE</th>
+                <th>RESPONSE</th>
+                <th>URI</th>
+
+                
+                <!-- Add more table headers as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+                <!-- Display more columns as needed -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+</body>
+</html>
